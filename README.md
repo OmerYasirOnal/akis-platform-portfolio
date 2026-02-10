@@ -1,3 +1,4 @@
+```markdown
 ---
 
 # AKIS Platform
@@ -238,3 +239,5 @@ Bu public depo, platformun mimarisini sergileyen seçilmiş kaynak kodu ve dokü
 ## Lisans
 
 MIT
+
+```
