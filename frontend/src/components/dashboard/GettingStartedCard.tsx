@@ -178,7 +178,7 @@ export function GettingStartedCard() {
             <div
               className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                 step.done
-                  ? 'bg-ak-primary text-ak-bg'
+                  ? 'bg-ak-primary text-[#111418]'
                   : 'border-2 border-ak-border bg-ak-surface-2 text-ak-text-secondary'
               }`}
             >

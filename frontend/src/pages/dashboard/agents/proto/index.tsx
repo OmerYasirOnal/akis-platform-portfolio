@@ -11,8 +11,9 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Card from '../../../../components/common/Card';
 import Button from '../../../../components/common/Button';
+import AgentRuntimeSettingsDrawer from '../../../../components/agents/AgentRuntimeSettingsDrawer';
 import { useAgentStatus } from '../../../../hooks/useAgentStatus';
-import { agentsApi, type JobDetail } from '../../../../services/api/agents';
+import { agentsApi, type JobDetail, type RuntimeOverride } from '../../../../services/api/agents';
 import { getMultiProviderStatus, type AIKeyProvider } from '../../../../services/api/ai-keys';
 
 type ActiveTab = 'logs' | 'artifacts';
@@ -53,6 +54,8 @@ const DashboardAgentProtoPage = () => {
   // Workspace panel
   const [activeTab, setActiveTab] = useState<ActiveTab>('logs');
   const logsEndRef = useRef<HTMLDivElement>(null);
+  const [showSettingsDrawer, setShowSettingsDrawer] = useState(false);
+  const [runtimeOverride, setRuntimeOverride] = useState<RuntimeOverride | undefined>(undefined);
 
   // Auto-scroll logs
   useEffect(() => {
@@ -175,6 +178,7 @@ const DashboardAgentProtoPage = () => {
       const response = await agentsApi.runAgent({
         type: 'proto',
         payload,
+        runtimeOverride,
       });
 
       const job = await agentsApi.getJob(response.jobId);
@@ -286,12 +290,17 @@ const DashboardAgentProtoPage = () => {
             Bootstrap working MVP scaffolds from requirements or goals.
           </p>
         </div>
-        <Link
-          to="/agents"
-          className="text-xs font-medium text-ak-text-secondary hover:text-ak-primary transition-colors"
-        >
-          All Agents
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            to="/agents"
+            className="text-xs font-medium text-ak-text-secondary hover:text-ak-primary transition-colors"
+          >
+            All Agents
+          </Link>
+          <Button variant="secondary" onClick={() => setShowSettingsDrawer(true)}>
+            Settings
+          </Button>
+        </div>
       </header>
 
       {/* Configuration Bar */}
@@ -500,6 +509,18 @@ const DashboardAgentProtoPage = () => {
           )}
         </div>
       </Card>
+      <AgentRuntimeSettingsDrawer
+        open={showSettingsDrawer}
+        agentType="proto"
+        onClose={() => setShowSettingsDrawer(false)}
+        onSaved={(next) =>
+          setRuntimeOverride({
+            runtimeProfile: next.runtimeProfile,
+            temperatureValue: next.temperatureValue,
+            commandLevel: next.commandLevel,
+          })
+        }
+      />
     </div>
   );
 };

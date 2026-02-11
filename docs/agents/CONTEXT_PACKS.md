@@ -18,6 +18,11 @@
 **February (S0.5):** Context packs — static, pre-assembled context bundles.
 **March (M2):** Evaluate `pg_trgm` for lightweight retrieval if needed.
 
+Research alignment:
+- "Everything is Context" (Ref 4): packs are first-class auditable artifacts (`packId`, `packVersion`, `profile`, `selectedBy`).
+- Token overflow strategy for S0.5 is `truncation`; re-ranking is deferred to M2.
+- Contracts-first enforcement: invalid profile/schema is rejected (no silent fallback).
+
 ---
 
 ## Context
@@ -44,6 +49,7 @@ A "context pack" is a deterministic bundle of files and metadata that an agent r
 ```
 User triggers agent
   → Orchestrator reads job payload (repo, branch, target)
+  → Orchestrator selects pack profile + version from job input
   → Orchestrator fetches relevant files via MCP GitHub adapter
   → Files are bundled as a context pack (JSON array of {path, content})
   → Context pack is passed to agent as part of the prompt
@@ -65,6 +71,10 @@ interface ContextPack {
     totalFiles: number; // total files in pack
     truncated: boolean; // whether any files were truncated
     assembledAt: string; // ISO timestamp
+    packId: string;      // deterministic audit id (cp_<hash>)
+    packVersion: string; // e.g. "v1"
+    profile: string;     // selected profile ("default", "docs", ...)
+    selectedBy: string | null; // job id or null
   };
 }
 ```

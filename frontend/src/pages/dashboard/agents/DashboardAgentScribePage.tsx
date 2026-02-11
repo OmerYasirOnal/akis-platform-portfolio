@@ -12,13 +12,14 @@ import { useEffect, useMemo, useState, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Card from '../../../components/common/Card';
 import Button from '../../../components/common/Button';
+import AgentRuntimeSettingsDrawer from '../../../components/agents/AgentRuntimeSettingsDrawer';
 import SearchableSelect, { type SelectOption } from '../../../components/common/SearchableSelect';
 import {
   githubDiscoveryApi,
   type GitHubRepo,
   type GitHubBranch,
 } from '../../../services/api/github-discovery';
-import { agentsApi, type JobDetail } from '../../../services/api/agents';
+import { agentsApi, type JobDetail, type RuntimeOverride } from '../../../services/api/agents';
 import { integrationsApi } from '../../../services/api/integrations';
 import { getMultiProviderStatus, type AIKeyProvider } from '../../../services/api/ai-keys';
 import type { DocPack, DocDepth, DocTarget } from '../../../services/api/types';
@@ -82,6 +83,8 @@ const DashboardAgentScribePage = () => {
 
   // Advanced section
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showSettingsDrawer, setShowSettingsDrawer] = useState(false);
+  const [runtimeOverride, setRuntimeOverride] = useState<RuntimeOverride | undefined>(undefined);
 
   // Glass box panel
   const [activeTab, setActiveTab] = useState<ActiveTab>('logs');
@@ -395,6 +398,7 @@ const DashboardAgentScribePage = () => {
       const response = await agentsApi.runAgent({
         type: 'scribe',
         payload: jobPayload,
+        runtimeOverride,
       });
 
       // Start polling - fetch full job details
@@ -482,13 +486,21 @@ const DashboardAgentScribePage = () => {
     : null;
 
   return (
-    <div className="space-y-6">
+    <>
+      <div className="space-y-6">
       {/* Header */}
       <header className="space-y-2">
-        <h1 className="text-2xl font-semibold text-ak-text-primary">Scribe Console</h1>
-        <p className="text-sm text-ak-text-secondary">
-          Configure and run Scribe documentation agent.
-        </p>
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-semibold text-ak-text-primary">Scribe Console</h1>
+            <p className="text-sm text-ak-text-secondary">
+              Configure and run Scribe documentation agent.
+            </p>
+          </div>
+          <Button variant="secondary" onClick={() => setShowSettingsDrawer(true)}>
+            Settings
+          </Button>
+        </div>
       </header>
 
       {/* Horizontal Configuration Bar */}
@@ -879,7 +891,20 @@ const DashboardAgentScribePage = () => {
           )}
         </div>
       </Card>
-    </div>
+      </div>
+      <AgentRuntimeSettingsDrawer
+        open={showSettingsDrawer}
+        agentType="scribe"
+        onClose={() => setShowSettingsDrawer(false)}
+        onSaved={(next) =>
+          setRuntimeOverride({
+            runtimeProfile: next.runtimeProfile,
+            temperatureValue: next.temperatureValue,
+            commandLevel: next.commandLevel,
+          })
+        }
+      />
+    </>
   );
 };
 

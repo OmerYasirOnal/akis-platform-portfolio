@@ -170,7 +170,7 @@ const DashboardOverviewPage = () => {
             to={item.to}
             className={`flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
               item.primary
-                ? 'bg-ak-primary text-ak-bg hover:bg-ak-primary/90'
+                ? 'bg-ak-primary text-[color:var(--ak-on-primary)] hover:brightness-110 active:brightness-95'
                 : 'border border-ak-border bg-ak-surface text-ak-text-primary hover:bg-ak-surface-2'
             }`}
           >

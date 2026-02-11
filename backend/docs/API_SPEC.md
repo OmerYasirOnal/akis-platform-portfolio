@@ -90,6 +90,11 @@ Submit a new agent job.
 {
   "type": "scribe" | "trace" | "proto",
   "payload": { ... },
+  "runtimeOverride": {
+    "runtimeProfile": "deterministic" | "balanced" | "creative" | "custom",
+    "temperatureValue": 0.0-1.0,
+    "commandLevel": 1 | 2 | 3 | 4 | 5
+  },
   "requiresStrictValidation": false
 }
 ```
@@ -172,6 +177,13 @@ Get job status and result.
   "id": "uuid-string",
   "type": "scribe",
   "state": "completed",
+  "effectiveRuntime": {
+    "runtimeProfile": "deterministic",
+    "temperatureValue": null,
+    "commandLevel": 2,
+    "allowCommandExecution": false,
+    "settingsVersion": 1
+  },
   "payload": { ... },
   "result": { ... },
   "error": null,
@@ -793,6 +805,46 @@ All auth errors follow this structure:
 | `UNAUTHORIZED` | 401 | Missing or invalid token |
 | `USER_NOT_FOUND` | 404 | User doesn't exist |
 | `USER_DISABLED` | 403 | Account suspended |
+
+---
+
+## Conversations API (S0.5.4)
+
+Conversation endpoints provide backend-persistent threads, messages, plan candidates, and trust snapshots for Agents Hub.
+
+### Thread Status
+- `active`
+- `awaiting_user_input`
+- `awaiting_plan_selection`
+- `queued`
+- `completed`
+- `failed`
+
+### Plan Candidate Status
+- `unbuilt`
+- `queued`
+- `building`
+- `built`
+- `failed`
+
+### Endpoints
+- `POST /api/conversations/threads`
+- `GET /api/conversations/threads`
+- `GET /api/conversations/threads/:threadId`
+- `POST /api/conversations/threads/:threadId/messages`
+- `GET /api/conversations/threads/:threadId/messages`
+- `GET /api/conversations/threads/:threadId/stream` (SSE)
+- `GET /api/conversations/threads/:threadId/plans`
+- `POST /api/conversations/threads/:threadId/plans/generate`
+- `POST /api/conversations/threads/:threadId/plans/:planId/generate-alternatives`
+- `POST /api/conversations/threads/:threadId/plans/build`
+- `POST /api/conversations/tasks/:taskId/respond`
+- `GET /api/conversations/threads/:threadId/trust-snapshots`
+- `POST /api/conversations/threads/:threadId/trust-snapshots`
+
+### Build Guardrail
+- Per user maximum active run limit: `3`
+- When limit is exceeded, plan build request is queued with `status: queued`
 
 ---
 

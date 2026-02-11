@@ -205,16 +205,14 @@ function AkisIcon({ className = '' }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      fill="currentColor"
       className={className}
     >
-      {/* Stylized 'A' representing AKIS */}
-      <path d="M12 2L3 22h6l3-7l3 7h6L12 2z" />
-      <path d="M7 15h10" />
+      {/* Stylized 'A' with speed lines matching AKIS brand */}
+      <path d="M12 2L4 22h4l1.5-4h5L16 22h4L12 2zm-1.5 12L12 8.5l1.5 5.5h-3z" />
+      <line x1="2" y1="8" x2="7" y2="8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="3" y1="11" x2="7" y2="11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="4" y1="14" x2="7" y2="14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }

@@ -168,6 +168,9 @@ AKIS Platform (Public + Private Areas)
     │
     ├── /dashboard/integrations
     │
+    ├── /agents/smart-automations (Smart Automations)
+    │   └── /agents/smart-automations/:id (Automation Detail)
+    │
     ├── /dashboard/analytics
     │
     └── /dashboard/settings

@@ -9,6 +9,7 @@ import { createPlanGenerator, type PlanContext, type GeneratedPlan } from '../..
 import { db } from '../../db/client.js';
 import { jobPlans } from '../../db/schema.js';
 import { eq } from 'drizzle-orm';
+import { runScribeSkill, type ScribeSkillName } from '../../core/contracts/ScribeSkillContracts.js';
 
 /**
  * ScribeTaskContext - Input payload for ScribeAgent
@@ -45,6 +46,10 @@ export interface ScribeTaskContext {
   passes?: number;
   /** Analyze last N commits/PRs for context (optional) */
   analyzeLastNCommits?: number;
+  /** Optional deterministic skill mode for contract-first output generation */
+  skill?: ScribeSkillName;
+  /** Skill input payload validated by per-skill schema */
+  skillInput?: unknown;
 }
 
 /**
@@ -673,6 +678,16 @@ export class ScribeAgent extends BaseAgent {
     }
     const task = context as ScribeTaskContext;
     const dryRun = task.dryRun === true;
+
+    if (task.skill) {
+      return {
+        ok: true,
+        agent: 'scribe-v2',
+        mode: 'contract-first-doc-specialist',
+        skill: task.skill,
+        skillResult: runScribeSkill(task.skill, task.skillInput ?? {}),
+      };
+    }
 
     // Resolve doc pack configuration with defaults
     const docPackConfig: ResolvedDocPackConfig = resolveDocPackConfig({
