@@ -1,3 +1,4 @@
+```markdown
 ---
 
 # AKIS Platform
@@ -91,68 +92,6 @@ React SPA → Caddy (auto-TLS) → Fastify API → PostgreSQL
 
 ---
 
-## Ne İnşa Ettim (Mühendislik Vurguları)
-
-### Ajan Orkestrasyon Motoru
-- Durum kalıcılığı ile tam FSM yaşam döngüsü yönetimi
-- Dinamik ajan örnekleme için Factory + Registry kalıbı
-- Plan → Yürüt → Yansıt hattı, kalite puanlaması (0-100)
-- Server-Sent Events (SSE) ile gerçek zamanlı iş akışı
-- Yapılandırılabilir watchdog ile askıda kalan iş tespiti
-
-### Kimlik Doğrulama Sistemi
-- 6 haneli doğrulama kodlu çok adımlı email/şifre akışı (15dk süre, bcrypt)
-- OAuth entegrasyonu (GitHub + Google), otomatik hoşgeldin e-postası
-- HTTP-only, Secure, SameSite cookie'lerde JWT oturumları
-
-### Geliştirici Deneyimi
-- Cursor esinli UI, lazy-load sayfalar (%50 bundle azaltma)
-- 3 adımlı onboarding: GitHub bağla → AI anahtarı ekle → ilk ajanı çalıştır
-- İki dilli arayüz (İngilizce/Türkçe), ~500 i18n anahtarı
-- Error envelope kalıbı ile standart hata işleme
-
-### Altyapı ve DevOps
-- Docker multi-arch build (amd64 + arm64)
-- CI/CD: Her PR'da kalite kapıları ile GitHub Actions
-- Health doğrulama, versiyon kontrolü ve otomatik rollback ile staging deploy
-- 12 kontrollü otomatik smoke test paketi
-- MCP Gateway staging'de her zaman aktif (sıfır manuel adım)
-
-### Güvenlik
-- Kullanıcı AI anahtarları için AES-256-GCM şifreleme
-- SSE akışlarında hassas veri redaksiyonu (GitHub PAT, OAuth token, API anahtarları)
-- Rate limiting, Helmet başlıkları, CORS uygulaması
-- UI'da API anahtarı maskeleme (yalnızca son 4 karakter)
-
----
-
-## Staging Ortamı
-
-Platform tek bir OCI Free Tier ARM64 VM üzerinde çalışır:
-
-| Endpoint | Yanıt |
-|----------|-------|
-| `/health` | `{"status":"ok"}` |
-| `/ready` | Veritabanı bağlı, şifreleme yapılandırıldı, email aktif, OAuth hazır |
-| `/version` | Commit SHA + build zamanı + semver |
-
-12 otomatik smoke testinin tamamı geçiyor. TLS, Caddy + Let's Encrypt ile otomatik sağlanır.
-
----
-
-## Geliştirme Zaman Çizelgesi
-
-| Faz | Dönem | Ne İnşa Edildi |
-|-----|-------|---------------|
-| Temel | Kasım 2025 | Çekirdek mimari, modüler monolit kurulumu |
-| Web Shell | Aralık 2025 | Temel UI, Fastify backend, kimlik doğrulama |
-| Ajan EA | Aralık 2025 | Scribe, Trace, Proto erken erişim |
-| Gözlemlenebilirlik | Ocak 2026 | Loglama, trace kaydı, SSE akışı |
-| UI Yenileme | Ocak 2026 | Cursor esinli dashboard, ajan konsolları |
-| Pilot Demo | Şubat 2026 | Staging deploy, 1.344 test, onboarding, geri bildirim |
-
----
-
 ## Yerel Kurulum
 
 ```bash
@@ -202,39 +141,9 @@ pnpm -C frontend test
 
 ---
 
-## Depo Yapısı
-
-Bu public depo, platformun mimarisini sergileyen seçilmiş kaynak kodu ve dokümantasyon içerir:
-
-```
-├── README.md                            # Bu dosya (Türkçe)
-├── README.en.md                         # English version
-├── LICENSE                              # MIT
-├── SECURITY.md                          # Güvenlik açığı bildirimi
-├── backend/
-│   ├── docs/                            # API spec, auth akışı, ajan iş akışları
-│   └── src/
-│       ├── core/                        # Orkestratör, FSM, olaylar, izleme
-│       ├── agents/{scribe,trace,proto}/ # Ajan implementasyonları
-│       └── services/
-│           ├── mcp/adapters/            # MCP protokol adaptörleri
-│           └── quality/                 # Kalite puanlama motoru
-├── frontend/src/
-│   ├── pages/dashboard/                 # Dashboard + ajan konsol sayfaları
-│   └── components/
-│       ├── agents/                      # Ajan UI bileşenleri
-│       ├── jobs/                        # İş yönetimi UI
-│       └── dashboard/                   # Dashboard widget'ları
-└── docs/
-    ├── agents/                          # Ajan sözleşmeleri, bağlam paketleri
-    ├── UI_DESIGN_SYSTEM.md              # Tasarım sistemi dokümantasyonu
-    └── public/assets/                   # Ekran görüntüleri ve demo GIF'leri
-```
-
-> **Not:** Bu seçilmiş bir vitrin deposudur — tam private depo değildir. Tam kod tabanı 322+ kaynak dosyası, 106 test dosyası, CI/CD hatları, deployment altyapısı ve dahili planlama belgeleri içerir.
-
----
-
 ## Lisans
 
 MIT
+
+```
+```
