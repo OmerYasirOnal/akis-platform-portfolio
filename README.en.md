@@ -1,5 +1,3 @@
----
-
 # AKIS Platform
 
 **AI Agent Orchestration System for Software Development**

@@ -1,5 +1,3 @@
----
-
 # AKIS Platform
 
 **Yazılım Geliştirme için Yapay Zeka Ajan Orkestrasyon Sistemi**
