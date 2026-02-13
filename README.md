@@ -124,33 +124,6 @@ React SPA → Caddy (auto-TLS) → Fastify API → PostgreSQL
 
 ---
 
-## Staging Ortamı
-
-Platform tek bir OCI Free Tier ARM64 VM üzerinde çalışır:
-
-| Endpoint | Yanıt |
-|----------|-------|
-| `/health` | `{"status":"ok"}` |
-| `/ready` | Veritabanı bağlı, şifreleme yapılandırıldı, email aktif, OAuth hazır |
-| `/version` | Commit SHA + build zamanı + semver |
-
-12 otomatik smoke testinin tamamı geçiyor. TLS, Caddy + Let's Encrypt ile otomatik sağlanır.
-
----
-
-## Geliştirme Zaman Çizelgesi
-
-| Faz | Dönem | Ne İnşa Edildi |
-|-----|-------|---------------|
-| Temel | Kasım 2025 | Çekirdek mimari, modüler monolit kurulumu |
-| Web Shell | Aralık 2025 | Temel UI, Fastify backend, kimlik doğrulama |
-| Ajan EA | Aralık 2025 | Scribe, Trace, Proto erken erişim |
-| Gözlemlenebilirlik | Ocak 2026 | Loglama, trace kaydı, SSE akışı |
-| UI Yenileme | Ocak 2026 | Cursor esinli dashboard, ajan konsolları |
-| Pilot Demo | Şubat 2026 | Staging deploy, 1.344 test, onboarding, geri bildirim |
-
----
-
 ## Yerel Kurulum
 
 ```bash
@@ -197,39 +170,6 @@ pnpm -C frontend test
 - 4 ay boyunca 7 fazda iteratif geliştirme
 - Staging ortamında gerçek kullanıcılarla pilot değerlendirme
 - Nicel metrikler: görev tamamlanma süresi, çıktı kalite puanları, test kapsama oranı
-
----
-
-## Depo Yapısı
-
-Bu public depo, platformun mimarisini sergileyen seçilmiş kaynak kodu ve dokümantasyon içerir:
-
-```
-├── README.md                            # Bu dosya (Türkçe)
-├── README.en.md                         # English version
-├── LICENSE                              # MIT
-├── SECURITY.md                          # Güvenlik açığı bildirimi
-├── backend/
-│   ├── docs/                            # API spec, auth akışı, ajan iş akışları
-│   └── src/
-│       ├── core/                        # Orkestratör, FSM, olaylar, izleme
-│       ├── agents/{scribe,trace,proto}/ # Ajan implementasyonları
-│       └── services/
-│           ├── mcp/adapters/            # MCP protokol adaptörleri
-│           └── quality/                 # Kalite puanlama motoru
-├── frontend/src/
-│   ├── pages/dashboard/                 # Dashboard + ajan konsol sayfaları
-│   └── components/
-│       ├── agents/                      # Ajan UI bileşenleri
-│       ├── jobs/                        # İş yönetimi UI
-│       └── dashboard/                   # Dashboard widget'ları
-└── docs/
-    ├── agents/                          # Ajan sözleşmeleri, bağlam paketleri
-    ├── UI_DESIGN_SYSTEM.md              # Tasarım sistemi dokümantasyonu
-    └── public/assets/                   # Ekran görüntüleri ve demo GIF'leri
-```
-
-> **Not:** Bu seçilmiş bir vitrin deposudur — tam private depo değildir. Tam kod tabanı 322+ kaynak dosyası, 106 test dosyası, CI/CD hatları, deployment altyapısı ve dahili planlama belgeleri içerir.
 
 ---
 
